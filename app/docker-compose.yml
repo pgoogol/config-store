@@ -1,0 +1,69 @@
+version: "3.3"
+
+services:
+  product:
+    image: microservice/product:latest
+    container_name: product
+    hostname: product
+    environment:
+      - EUREKA_SERVER=http://192.168.99.104:8761/eureka
+    restart: on-failure
+    ports:
+      - 8083:8083
+    #networks:
+    #  - mynet
+    network_mode: service_mynet
+  calculation:
+    image: microservice/calculation:latest
+    container_name: calculation
+    hostname: calculation
+    environment:
+      - EUREKA_SERVER=http://192.168.99.104:8761/eureka
+    restart: on-failure
+    ports:
+      - 8085:8085
+    #networks:
+    #  - mynet
+    network_mode: service_mynet
+  customer:
+    image: microservice/customer:latest
+    container_name: customer
+    hostname: customer
+    environment:
+      - EUREKA_SERVER=http://192.168.99.104:8761/eureka
+    restart: on-failure
+    ports:
+      - 8080:8080
+    #networks:
+    #  - mynet
+    network_mode: service_mynet
+  payment:
+    image: microservice/payment:latest
+    container_name: payment
+    hostname: payment
+    environment:
+      - EUREKA_SERVER=http://192.168.99.104:8761/eureka
+      - KAFKA_SERVER=http://192.168.99.104:9092
+    restart: on-failure
+    ports:
+      - 8081:8081
+    #networks:
+    #  - mynet
+    network_mode: service_mynet
+  policy:
+    image: microservice/policy:latest
+    container_name: policy
+    hostname: policy
+    environment:
+      - EUREKA_SERVER=http://192.168.99.104:8761/eureka
+      - KAFKA_SERVER=http://192.168.99.104:9092
+    restart: on-failure
+    ports:
+      - 8082:8082
+    #networks:
+    #  - mynet
+    network_mode: service_mynet
+
+#networks:
+#  mynet:
+#    driver: bridge

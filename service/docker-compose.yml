@@ -1,0 +1,36 @@
+version: "3.3"
+
+services:
+  discovery:
+    image: microservice/discovery
+    container_name: discovery
+    ports:
+      - 8761:8761
+    networks:
+      - mynet
+  gateway:
+    image: microservice/gateway
+    container_name: gateway
+    environment:
+      - EUREKA_SERVER=http://192.168.99.104:8761/eureka
+    depends_on:
+      - discovery
+    ports:
+      - 9080:9080
+    networks:
+      - mynet
+  config:
+    image: microservice/config-server:latest
+    container_name: config
+    environment:
+      - EUREKA_SERVER=http://192.168.99.104:8761/eureka
+    depends_on:
+      - discovery
+    ports:
+      - 8888:8888
+    networks:
+      - mynet
+
+networks:
+  mynet:
+    driver: bridge
